@@ -32,18 +32,29 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      './app/**/*.js': ['coverage']
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots', 'junit'],
+    reporters: ['progress', 'junit','coverage'],
 
     junitReporter: {
-      outputFile: 'test-results.xml'
+      outputDir: 'reports', // results will be saved as $outputDir/$browserName.xml
+      outputFile: 'report.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile
+      suite: '', // suite will become the package name attribute in xml testsuite element
+      useBrowserName: true, // add browser name to report and classes names
+      nameFormatter: undefined, // function (browser, result) to customize the name attribute in xml testcase element
+      classNameFormatter: undefined, // function (browser, result) to customize the classname attribute in xml testcase element
+      properties: {}, // key value pair of properties to add to the <properties> section of the report
+      xmlVersion: null // use '1' if reporting to be per SonarQube 6.2 XML format
     },
-
+    coverageReporter: {
+      type : 'html',
+      dir : 'reports/'
+    },
     // web server port
     port: 9876,
 
@@ -67,7 +78,8 @@ module.exports = function(config) {
     plugins : [
     'karma-junit-reporter',
     'karma-firefox-launcher',
-    'karma-jasmine'
+    'karma-jasmine',
+    'karma-coverage'
     ],
 
     // Continuous Integration mode
